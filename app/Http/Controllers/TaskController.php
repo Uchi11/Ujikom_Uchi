@@ -76,35 +76,4 @@ class TaskController extends Controller // Mendefinisikan class TaskController y
        
        return view('pages.details', $data); // Mengembalikan view 'pages.detail' dengan data
     }
-    public function edit($id)
-    {
-        // Mengambil data task berdasarkan ID
-        $task = Task::findOrFail($id);
-        
-        // Mengarahkan ke view edit dengan data task
-        return view('partials.modal', compact('task'));
-    }
-    public function update(Request $request, $id)
-    {
-        // Validasi input
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'description' => 'nullable|string',
-        ]);
-    
-        // Temukan task berdasarkan ID
-        $task = Task::findOrFail($id);
-    
-        // Update data task
-        $task->update([
-            'name' => $request->name,
-            'description' => $request->description,
-        ]);
-    
-        // Redirect ke halaman detail dengan pesan sukses
-        return redirect()->route('partials.modal', $task->id)
-                         ->with('success', 'Tugas berhasil diperbarui!');
-    }
-
-
 }
