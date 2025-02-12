@@ -2,22 +2,25 @@
 
 namespace Database\Seeders;
 
-use App\Models\User;
-// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
 {
     /**
      * Seed the application's database.
+     *
+     * Method ini dijalankan saat kita menjalankan perintah:
+     * php artisan db:seed
+     *
+     * Di sini, kita memanggil seeder lain untuk mengisi tabel
+     * task_lists dan tasks dengan data awal.
      */
     public function run(): void
     {
-        // User::factory(10)->create();
+        // Memanggil TaskListSeeder untuk mengisi tabel 'task_lists' dengan data dummy
+        $this->call(TaskListSeeder::class);
 
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
-        ]);
+        // Memanggil TaskSeeder untuk mengisi tabel 'tasks' dengan data dummy
+        $this->call(TaskSeeder::class);
     }
 }
