@@ -20,20 +20,6 @@ class TaskSeeder extends Seeder
         // Array berisi daftar tugas yang akan dimasukkan ke dalam tabel 'tasks'
         $tasks = [
             [
-                'name' => 'Belajar Laravel', // Nama tugas
-                'description' => 'Belajar Laravel di santri koding', // Deskripsi tugas
-                'is_completed' => false, // Status tugas, false berarti belum selesai
-                'priority' => 'medium', // Prioritas tugas (low, medium, high)
-                'list_id' => TaskList::where('name', 'Belajar')->first()->id, // Menghubungkan dengan list 'Belajar'
-            ],
-            [
-                'name' => 'Belajar React',
-                'description' => 'Belajar React di WPU',
-                'is_completed' => true,
-                'priority' => 'high',
-                'list_id' => TaskList::where('name', 'Belajar')->first()->id,
-            ],
-            [
                 'name' => 'Gunung',
                 'description' => 'Mendaki gunung bersama teman tongkrongan',
                 'is_completed' => false,
@@ -68,20 +54,6 @@ class TaskSeeder extends Seeder
                 'priority' => 'high',
                 'list_id' => TaskList::where('name', 'Tugas')->first()->id,
             ],
-            [
-                'name' => 'Cuci Baju',
-                'description' => 'Cuci baju sekolah di mesin cuci',
-                'is_completed' => false,
-                'priority' => 'medium',
-                'list_id' => TaskList::where('name', 'Activity')->first()->id,
-            ],
-            [
-                'name' => 'Belajar Python',
-                'description' => 'Ulik Python di WPU',
-                'is_completed' => true,
-                'priority' => 'medium',
-                'list_id' => TaskList::where('name', 'Belajar')->first()->id,
-            ]
         ];
 
         // Memasukkan seluruh data tugas ke dalam tabel 'tasks' dalam satu query

@@ -1,115 +1,232 @@
-@extends('layouts.app') <!-- Menggunakan layout utama 'app' -->
+@extends('layouts.app')
+<!-- Menggunakan layout 'app' sebagai struktur dasar halaman, di mana konten akan dimuat -->
 
 @section('content')
-    <!-- Bagian konten yang akan di-render di layout -->
-    <div id="content" class="overflow-y-hidden overflow-x-hidden">
-        <!-- Memeriksa apakah belum ada list tugas yang ditambahkan -->
-        @if ($lists->count() == 0)
-            <div class="d-flex flex-column align-items-center">
-                <p class="fw-bold text-center">Belum ada tugas yang ditambahkan</p>
-                <!-- Tombol Tambah List muncul hanya saat belum ada list -->
-                <button type="button" class="btn btn-primary d-flex align-items-center gap-2 mt-3" data-bs-toggle="modal"
-                    data-bs-target="#addListModal">
-                    <i class="bi bi-plus-square fs-4"></i> Tambah List
-                </button>
+    <div id="content" class="overflow-hidden mt-6">
+        <!-- Membuat div dengan ID 'content', memberikan margin atas 6 dan menyembunyikan overflow -->
+
+        <div class="d-flex justify-content-between align-items-center mb-4 px-4">
+            <!-- Membuat container flex yang membagi ruang secara merata, dengan jarak antar item dan padding pada sisi kiri-kanan -->
+
+            <div class="col-4">
+                <!-- Membuat kolom dengan lebar 4 dari total 12 kolom (Bootstrap Grid System) -->
+
+                <form action="{{ route('home') }}" method="GET" class="input-group shadow-sm">
+                    <!-- Membuat form dengan metode GET dan mengarahkan ke route 'home'. Form ini berfungsi untuk mencari tugas -->
+                    <input type="text" class="form-control border border-primary rounded-start-pill" name="query"
+                        placeholder="Cari tugas atau list..." value="{{ request()->query('query') }}"
+                        style="border-width: 2px;">
+                    <!-- Input text untuk pencarian tugas atau list, dengan styling dan border khusus -->
+
+                    <button type="submit" class="btn btn-primary rounded-end-pill">
+                        <i class="bi bi-search"></i>
+                    </button>
+                    <!-- Tombol untuk submit form pencarian, dengan ikon pencarian -->
+                </form>
             </div>
-        @endif
 
-        @if ($lists->count() > 0)
-            <!-- Tombol Tambah List tetap muncul meskipun sudah ada list -->
-            <div class="d-flex justify-content-center mb-4">
-                <button type="button" class="btn btn-primary d-flex align-items-center gap-2" data-bs-toggle="modal"
-                    data-bs-target="#addListModal">
-                    <i class="bi bi-plus-square fs-4"></i> Tambah List
-                </button>
+            <div class="d-flex gap-3">
+                <!-- Div flex yang menampung beberapa informasi dan statistik terkait tugas -->
+
+                <div class="d-flex align-items-center p-3 rounded shadow-sm"
+                    style="background: linear-gradient(135deg, #007bff, #0056b3); color: white;">
+                    <!-- Menampilkan statistik "Total List" dengan latar belakang gradien biru -->
+                    <i class="bi bi-list-task fs-5 me-2"></i>
+                    <span class="fw-semibold">Total List:</span>
+                    <span class="ms-1">{{ $lists->count() }}</span>
+                    <!-- Menampilkan jumlah list tugas -->
+                </div>
+
+                <div class="d-flex align-items-center p-3 rounded shadow-sm"
+                    style="background: linear-gradient(135deg, #6c757d, #343a40); color: white;">
+                    <!-- Menampilkan statistik "Total Tugas" dengan latar belakang gradien abu-abu -->
+                    <i class="bi bi-clipboard-check fs-5 me-2"></i>
+                    <span class="fw-semibold">Total Tugas:</span>
+                    <span class="ms-1">{{ $lists->sum(fn($list) => $list->tasks->count()) }}</span>
+                    <!-- Menghitung dan menampilkan total tugas dari semua list -->
+                </div>
+
+                <div class="d-flex align-items-center p-3 rounded shadow-sm"
+                    style="background: linear-gradient(135deg, #28a745, #1e7e34); color: white;">
+                    <!-- Menampilkan statistik "Tugas Selesai" dengan latar belakang gradien hijau -->
+                    <i class="bi bi-check-circle fs-5 me-2"></i>
+                    <span class="fw-semibold">Tugas Selesai:</span>
+                    <span class="ms-1">{{ $lists->sum(fn($list) => $list->tasks->where('is_completed', true)->count()) }}
+                    </span>
+                    <!-- Menghitung dan menampilkan jumlah tugas yang telah selesai dari semua list -->
+                </div>
             </div>
-        @endif
+        </div>
+    </div>
 
-        <!-- Container dengan horizontal scroll untuk menampilkan semua list tugas -->
-        <div class="d-flex gap-3 px-3 flex-nowrap overflow-x-scroll overflow-y-hidden" style="height: 100vh;">
-            @foreach ($lists as $list)
-                <div class="card flex-shrink-0 shadow-sm" style="width: 18rem; max-height: 80vh; border-radius: 10px;">
+    @if ($lists->count() == 0)
+        <!-- Jika tidak ada list yang tersedia, tampilkan pesan ini -->
+        <div class="d-flex flex-column align-items-center justify-content-center vh-50">
+            <!-- Mengatur tampilan agar konten terpusat secara vertikal -->
 
-                    <!-- Header Card untuk setiap List Tugas -->
-                    <div class="card-header bg-primary text-white d-flex align-items-center justify-content-between"
-                        style="border-top-left-radius: 10px; border-top-right-radius: 10px;">
-                        <h4 class="card-title">{{ $list->name }}</h4>
+            <div class="card p-4 shadow-sm border-0 text-center d-flex align-items-center" style="max-width: 500px;">
+                <!-- Menampilkan kartu dengan pesan jika belum ada tugas, diatur agar tidak terlalu lebar -->
 
-                        <!-- Form untuk menghapus list -->
-                        <form action="{{ route('lists.destroy', $list->id) }}" method="POST" style="display: inline;">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" class="btn btn-sm p-0">
-                                <i class="bi bi-trash fs-5 text-white"></i>
-                            </button>
-                        </form>
-                    </div>
+                <div class="card-body text-center">
+                    <i class="bi bi-clipboard-x text-danger" style="font-size: 4rem;"></i>
+                    <!-- Menampilkan ikon dengan ukuran besar dan warna merah sebagai indikator tidak ada tugas -->
 
-                    <!-- Body Card untuk menampilkan tugas-tugas di dalam list -->
-                    <div class="card-body d-flex flex-column gap-2 overflow-x-hidden">
-                        @foreach ($tasks as $task)
-                            @if ($task->list_id == $list->id)
-                                <div class="card mb-3 border-light" style="border-radius: 10px;">
-                                    <div class="card-header bg-light">
-                                        <div class="d-flex align-items-center justify-content-between">
-                                            <div class="d-flex flex-column justify-content-center gap-2">
-                                                <!-- Link untuk melihat detail tugas -->
-                                                <a href="{{ route('tasks.show', $task->id) }}"
-                                                    class="{{ $task->is_completed ? 'text-decoration-line-through text-muted' : '' }}">
-                                                    {{ $task->name }}
-                                                </a>
-                                                <!-- Menampilkan prioritas tugas sebagai badge -->
-                                                <span class="badge text-bg-{{ $task->priorityClass }} badge-pill">
-                                                    {{ $task->priority }}
-                                                </span>
-                                            </div>
+                    <h5 class="fw-bold mt-3">Belum ada tugas</h5>
+                    <p class="text-muted">Buat tugas pertama Anda untuk memulai produktivitas!</p>
+                    <!-- Teks yang memberikan informasi bahwa belum ada tugas -->
 
-                                            <!-- Form untuk menghapus tugas -->
-                                            <form action="{{ route('tasks.destroy', $task->id) }}" method="POST"
-                                                style="display: inline;">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button type="submit" class="btn btn-sm p-0">
-                                                    <i class="bi bi-x-circle text-danger fs-5"></i>
-                                                </button>
-                                            </form>
-                                        </div>
-                                    </div>
-
-                                    <!-- Deskripsi tugas -->
-                                    <div class="card-body">
-                                        <p class="card-text text-truncate">{{ $task->description }}</p>
-                                    </div>
-
-                                    <!-- Tombol untuk menandai tugas sebagai selesai -->
-                                    @if (!$task->is_completed)
-                                        <div class="card-footer bg-light text-center">
-                                            <form action="{{ route('tasks.complete', $task->id) }}" method="POST">
-                                                @csrf
-                                                @method('PATCH')
-                                                <button type="submit" class="btn btn-sm btn-success w-100">
-                                                    <i class="bi bi-check fs-5"></i> Selesai
-                                                </button>
-                                            </form>
-                                        </div>
-                                    @endif
-                                </div>
-                            @endif
-                        @endforeach
-
-                        <!-- Tombol untuk menambahkan tugas baru dalam list ini -->
-                        <button type="button" class="btn btn-sm btn-outline-primary mt-2" data-bs-toggle="modal"
-                            data-bs-target="#addTaskModal" data-list="{{ $list->id }}">
-                            <i class="bi bi-plus fs-5"></i> Tambah Tugas
+                    <div class="d-flex justify-content-center">
+                        <button type="button" class="btn btn-primary d-flex align-items-center gap-2 px-4 py-2 shadow-lg"
+                            data-bs-toggle="modal" data-bs-target="#addListModal"
+                            style="transition: 0.3s; border-radius: 50px;">
+                            <i class="bi bi-plus-circle fs-5"></i>
+                            <span class="fw-bold">Tambah Tugas</span>
                         </button>
-                    </div>
-
-                    <!-- Footer Card untuk menampilkan jumlah tugas dalam list -->
-                    <div class="card-footer bg-light d-flex justify-content-between align-items-center">
-                        <p class="card-text">{{ $list->tasks->count() }} Tugas</p>
+                        <!-- Tombol untuk menambah tugas baru dengan animasi transisi dan efek -->
                     </div>
                 </div>
-            @endforeach
+            </div>
         </div>
+    @endif
+
+    <div class="d-flex gap-3 px-3 flex-nowrap overflow-x-scroll overflow-y-hidden" style="height: 100vh;">
+        <!-- Menampilkan list tugas dalam bentuk horizontal dengan scroll, sehingga jika ada banyak list bisa discroll -->
+
+        @foreach ($lists as $list)
+            <!-- Loop untuk menampilkan setiap list tugas -->
+
+            <div class="card flex-shrink-0" style="width: 18rem; max-height: 80vh;">
+                <!-- Menampilkan kartu untuk setiap list tugas dengan ukuran tetap -->
+
+                <div class="card-header d-flex align-items-center justify-content-between bg-primary text-white">
+                    <!-- Header kartu dengan informasi nama list dan tombol untuk menghapus list -->
+                    <h4 class="card-title m-0">{{ $list->name }}</h4>
+                    <!-- Menampilkan nama list -->
+
+                    <form action="{{ route('lists.destroy', $list->id) }}" method="POST" style="display: inline;">
+                        <!-- Form untuk menghapus list -->
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit"
+                            class="btn btn-sm d-flex align-items-center justify-content-center p-2 rounded-circle border-0 bg-light text-danger shadow-sm">
+                            <i class="bi bi-trash3 fs-5"></i>
+                        </button>
+                        <!-- Tombol hapus dengan ikon tempat sampah -->
+                    </form>
+                </div>
+
+                <div class="card-body d-flex flex-column gap-2 overflow-x-hidden">
+                    <!-- Body kartu yang berisi daftar tugas pada list ini -->
+
+                    @foreach ($list->tasks as $task)
+                        <!-- Loop untuk menampilkan setiap tugas di dalam list -->
+
+                        <div class="card">
+                            <!-- Kartu untuk menampilkan tugas -->
+
+                            <div class="card-header">
+                                <!-- Header kartu tugas -->
+
+                                <div class="d-flex align-items-center justify-content-between">
+                                    <!-- Membuat layout fleksibel di header tugas -->
+
+                                    <div class="d-flex flex-column gap-1">
+                                        <!-- Kolom untuk menampilkan nama tugas dan prioritas -->
+
+                                        <div class="d-flex align-items-center gap-2">
+                                            <!-- Menampilkan prioritas tugas dengan spinner untuk tugas prioritas tinggi -->
+                                            @if ($task->priority == 'high' && !$task->is_completed)
+                                                <div class="spinner-grow spinner-grow-sm text-{{ $task->priorityClass }}"
+                                                    role="status">
+                                                    <span class="visually-hidden">Loading...</span>
+                                                </div>
+                                            @endif
+
+                                            <a href="{{ route('tasks.show', $task->id) }}"
+                                                class="fw-bold lh-1 m-0 text-decoration-none text-{{ $task->priorityClass }} {{ $task->is_completed ? 'text-decoration-line-through' : '' }}">
+                                                {{ $task->name }}
+                                            </a>
+                                            <!-- Menampilkan nama tugas dengan tautan ke detail tugas dan warna teks sesuai prioritas -->
+                                        </div>
+
+                                        <small class="badge bg-{{ $task->priorityClass }} text-white px-2 py-1">
+                                            {{ ucfirst($task->priority) }}
+                                        </small>
+                                        <!-- Menampilkan badge dengan warna yang sesuai dengan prioritas tugas -->
+                                    </div>
+
+                                    <div class="d-flex flex-column gap-2">
+                                        <!-- Kolom untuk tombol aksi tugas seperti hapus dan lihat detail -->
+
+                                        <form action="{{ route('tasks.destroy', $task->id) }}" method="POST">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="btn btn-sm btn-outline-danger p-1">
+                                                <i class="bi bi-x-lg fs-7"></i>
+                                            </button>
+                                            <!-- Tombol untuk menghapus tugas -->
+                                        </form>
+
+                                        <a href="{{ route('tasks.show', $task->id) }}"
+                                            class="btn btn-sm btn-outline-primary p-1">
+                                            <i class="bi bi-eye fs-7"></i>
+                                        </a>
+                                        <!-- Tombol untuk melihat detail tugas -->
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="card-body">
+                                <!-- Body kartu tugas untuk menampilkan deskripsi tugas -->
+                                <p class="card-text text-truncate">
+                                    {{ $task->description }}
+                                </p>
+                            </div>
+
+                            @if (!$task->is_completed)
+                                <!-- Jika tugas belum selesai, tampilkan tombol untuk menandai tugas selesai -->
+                                <div class="card-footer">
+                                    <form action="{{ route('tasks.complete', $task->id) }}" method="POST">
+                                        @csrf
+                                        @method('PATCH')
+                                        <button type="submit"
+                                            class="btn btn-sm btn-success w-100 d-flex align-items-center justify-content-center gap-2">
+                                            <i class="bi bi-check-circle fs-5"></i>
+                                            <span>Selesai</span>
+                                        </button>
+                                    </form>
+                                </div>
+                            @endif
+                        </div>
+                    @endforeach
+
+                    <button type="button" class="btn btn-sm btn-outline-primary" data-bs-toggle="modal"
+                        data-bs-target="#addTaskModal" data-list="{{ $list->id }}">
+                        <!-- Tombol untuk menambah tugas baru ke dalam list -->
+                        <span class="d-flex align-items-center justify-content-center">
+                            <i class="bi bi-plus-lg fs-5"></i>
+                            Tambah
+                        </span>
+                    </button>
+                </div>
+
+                <div class="card-footer d-flex justify-content-between align-items-center">
+                    <!-- Footer kartu yang menampilkan jumlah tugas dalam list -->
+                    <p class="card-text"><i class="bi bi-check2-square me-2"></i>{{ $list->tasks->count() }} Tugas</p>
+                </div>
+            </div>
+        @endforeach
+
+        @if ($lists->count() !== 0)
+            <!-- Jika ada list, tampilkan tombol untuk menambah list baru -->
+            <button type="button" class="btn btn-outline-primary flex-shrink-0"
+                style="width: 18rem; height: fit-content;" data-bs-toggle="modal" data-bs-target="#addListModal">
+                <span class="d-flex align-items-center justify-content-center">
+                    <i class="bi bi-plus-lg fs-5"></i>
+                    Tambah
+                </span>
+            </button>
+        @endif
+    </div>
     </div>
 @endsection

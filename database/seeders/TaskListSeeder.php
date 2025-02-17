@@ -21,14 +21,8 @@ class TaskListSeeder extends Seeder
                 'name' => 'Liburan',  // List untuk rencana atau kegiatan liburan
             ],
             [
-                'name' => 'Belajar',  // List untuk aktivitas belajar
-            ],
-            [
                 'name' => 'Tugas',    // List untuk tugas-tugas penting
             ],
-            [
-                'name' => 'Activity', // List untuk aktivitas harian atau rutin
-            ]
         ];
 
         // Memasukkan data ke dalam tabel 'task_lists' menggunakan metode insert
