@@ -65,9 +65,12 @@
         <div class="row justify-content-center">
             <div class="col-md-10 col-lg-8 text-center">
                 <!-- Tombol untuk menuju ke halaman utama aplikasi -->
+                <!-- Membuat link yang mengarah ke halaman daftar semua tugas (index) berdasarkan rute 'tasks.index' -->
                 <a href="{{ route('tasks.index') }}"
                     class="btn btn-lg btn-outline-primary shadow-lg px-5 py-3 rounded-pill text-uppercase transition-all duration-300 ease-in-out btn-animate"
-                    role="button">Mulai Gunakan Sekarang</a>
+                    role="button">
+                    Mulai Gunakan Sekarang
+                </a>
             </div>
         </div>
     </div>
