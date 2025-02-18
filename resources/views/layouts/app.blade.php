@@ -14,6 +14,11 @@
     <!-- Menampilkan judul halaman dinamis, berdasarkan variabel $title dan nama aplikasi dari konfigurasi -->
     <title>{{ $title }} - {{ config('app.name') }}</title>
 
+    <!-- Favicon untuk Tab Browser -->
+    <link rel="icon" href="{{ asset('img/mastodon.svg') }}" type="image/x-icon">
+
+    <link rel="stylesheet" href="{{ asset('css/style.css') }}">
+
     <!-- Mengimpor CSS dari Bootstrap untuk styling cepat dan konsisten -->
     <link rel="stylesheet" href="{{ asset('vendor/bootstrap/css/bootstrap.min.css') }}">
 
@@ -21,9 +26,6 @@
     <link rel="stylesheet" href="{{ asset('vendor/bootstrap-icons/font/bootstrap-icons.min.css') }}">
 
 </head>
-
-<!-- SweetAlert2 JS -->
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <body>
     <!-- Menyertakan komponen navbar dari folder 'partials' -->

@@ -98,6 +98,15 @@
             <div class="card flex-shrink-0" style="width: 18rem; max-height: 80vh;">
                 <!-- Menampilkan kartu untuk setiap list tugas dengan ukuran tetap -->
 
+
+                <!-- action="{{ route('lists.destroy', $list->id) }}":
+                            URL tujuan untuk form ini adalah rute 'lists.destroy' yang menerima parameter $list->id.
+                            Ini mengarah ke metode 'destroy' di controller yang akan menghapus daftar berdasarkan ID yang diberikan.
+                            method="POST":
+                            Menggunakan metode POST karena HTML hanya mendukung GET dan POST dalam form.
+                            Laravel akan memalsukan metode HTTP lain (seperti DELETE) dengan menambahkan parameter '_method' secara otomatis.
+                            style="display: inline;":
+                            Menetapkan tampilan form agar tampil dalam satu baris dengan elemen lainnya (inline). -->
                 <div class="card-header d-flex align-items-center justify-content-between bg-primary text-white">
                     <!-- Header kartu dengan informasi nama list dan tombol untuk menghapus list -->
                     <h4 class="card-title m-0">{{ $list->name }}</h4>
@@ -111,7 +120,7 @@
                             class="btn btn-sm d-flex align-items-center justify-content-center p-2 rounded-circle border-0 bg-light text-danger shadow-sm">
                             <i class="bi bi-trash3 fs-5"></i>
                         </button>
-                        <!-- Tombol hapus dengan ikon tempat sampah -->
+                        <!- - Tombol hapus dengan ikon tempat sampah -->
                     </form>
                 </div>
 
@@ -142,6 +151,7 @@
                                                 </div>
                                             @endif
 
+                                            <!-- Membuat link yang mengarah ke halaman detail tugas berdasarkan ID tugas -->
                                             <a href="{{ route('tasks.show', $task->id) }}"
                                                 class="fw-bold lh-1 m-0 text-decoration-none text-{{ $task->priorityClass }} {{ $task->is_completed ? 'text-decoration-line-through' : '' }}">
                                                 {{ $task->name }}
@@ -157,7 +167,6 @@
 
                                     <div class="d-flex flex-column gap-2">
                                         <!-- Kolom untuk tombol aksi tugas seperti hapus dan lihat detail -->
-
                                         <form action="{{ route('tasks.destroy', $task->id) }}" method="POST">
                                             @csrf
                                             @method('DELETE')
