@@ -27,7 +27,7 @@
                             class="rounded-circle border border-3 border-primary" width="50" height="50">
                         <!-- Avatar profil -->
                         <h6 class="fw-bold mt-2 mb-0">Uchi</h6> <!-- Nama pengguna -->
-                        <small class="text-muted">XII Rekayasa Perangkat Lunak</small> <!-- Email pengguna -->
+                        <small class="text-muted">XII Rekayasa Perangkat Lunak</small> <!-- Kelas dan jurusan pengguna -->
                     </div>
                     <hr class="dropdown-divider"> <!-- Pembatas horizontal di dropdown -->
                     <!-- Menu item untuk My Profile -->
