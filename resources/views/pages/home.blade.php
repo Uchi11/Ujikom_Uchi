@@ -25,6 +25,17 @@
                 </form>
             </div>
 
+            @if ($lists->count() !== 0)
+                <!-- Jika ada list, tampilkan tombol untuk menambah list baru -->
+                <button type="button" class="btn btn-outline-primary flex-shrink-0"
+                    style="width: 18rem; height: fit-content;" data-bs-toggle="modal" data-bs-target="#addListModal">
+                    <span class="d-flex align-items-center justify-content-center">
+                        <i class="bi bi-node-plus fs-4"></i>
+                        Add List
+                    </span>
+                </button>
+            @endif
+
             <div class="d-flex gap-3">
                 <!-- Div flex yang menampung beberapa informasi dan statistik terkait tugas -->
 
@@ -99,14 +110,8 @@
                 <!-- Menampilkan kartu untuk setiap list tugas dengan ukuran tetap -->
 
 
-                <!-- action="{{ route('lists.destroy', $list->id) }}":
-                            URL tujuan untuk form ini adalah rute 'lists.destroy' yang menerima parameter $list->id.
-                            Ini mengarah ke metode 'destroy' di controller yang akan menghapus daftar berdasarkan ID yang diberikan.
-                            method="POST":
-                            Menggunakan metode POST karena HTML hanya mendukung GET dan POST dalam form.
-                            Laravel akan memalsukan metode HTTP lain (seperti DELETE) dengan menambahkan parameter '_method' secara otomatis.
-                            style="display: inline;":
-                            Menetapkan tampilan form agar tampil dalam satu baris dengan elemen lainnya (inline). -->
+                <!-- action="{{ route('lists.destroy', $list->id) }}":  URL tujuan untuk form ini adalah rute 'lists.destroy' yang menerima parameter $list->id.Ini mengarah ke metode 'destroy' di controller yang akan menghapus daftar berdasarkan ID yang diberikan.
+                    method="POST":  Menggunakan metode POST karena HTML hanya mendukung GET dan POST dalam form.   Laravel akan memalsukan metode HTTP lain (seperti DELETE) dengan menambahkan parameter '_method' secara otomatis.   style="display: inline;":  Menetapkan tampilan form agar tampil dalam satu baris dengan elemen lainnya (inline). -->
                 <div class="card-header d-flex align-items-center justify-content-between bg-primary text-white">
                     <!-- Header kartu dengan informasi nama list dan tombol untuk menghapus list -->
                     <h4 class="card-title m-0">{{ $list->name }}</h4>
@@ -214,7 +219,7 @@
                         <!-- Tombol untuk menambah tugas baru ke dalam list -->
                         <span class="d-flex align-items-center justify-content-center">
                             <i class="bi bi-plus-lg fs-5"></i>
-                            Tambah
+                            Add Task
                         </span>
                     </button>
                 </div>
@@ -226,7 +231,7 @@
             </div>
         @endforeach
 
-        @if ($lists->count() !== 0)
+        {{-- @if ($lists->count() !== 0)
             <!-- Jika ada list, tampilkan tombol untuk menambah list baru -->
             <button type="button" class="btn btn-outline-primary flex-shrink-0"
                 style="width: 18rem; height: fit-content;" data-bs-toggle="modal" data-bs-target="#addListModal">
@@ -235,7 +240,7 @@
                     Tambah
                 </span>
             </button>
-        @endif
+        @endif --}}
     </div>
     </div>
 @endsection
