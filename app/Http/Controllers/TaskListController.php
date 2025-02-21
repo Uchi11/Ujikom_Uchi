@@ -13,7 +13,8 @@ class TaskListController extends Controller // Mendefinisikan class TaskListCont
      * @param \Illuminate\Http\Request $request - Permintaan HTTP yang berisi data list baru
      * @return \Illuminate\Http\RedirectResponse - Mengembalikan user ke halaman sebelumnya
      */
-    public function store(Request $request) {
+    public function store(Request $request)
+    {
         // Validasi input yang diterima dari form
         $request->validate([
             'name' => 'required|max:100' // Nama list wajib diisi dan maksimal 100 karakter
@@ -33,10 +34,24 @@ class TaskListController extends Controller // Mendefinisikan class TaskListCont
      * @param int $id - ID dari list yang akan dihapus
      * @return \Illuminate\Http\RedirectResponse - Mengembalikan user ke halaman sebelumnya
      */
-    public function destroy($id) {
+    public function destroy($id)
+    {
         // Mencari list berdasarkan ID, jika tidak ditemukan akan memunculkan error 404
         TaskList::findOrFail($id)->delete(); // Menghapus list dari database
 
         return redirect()->back(); // Mengembalikan user ke halaman sebelumnya setelah list berhasil dihapus
     }
+
+    // public function update(Request $request, TaskList $list)
+    // {
+    //     $request->validate([
+    //         'name' => 'required|string|max:255',
+    //     ]);
+
+    //     $list->update([
+    //         'name' => $request->name,
+    //     ]);
+
+    //     return redirect()->route('home')->with('success', 'List berhasil diperbarui!');
+    // }
 }

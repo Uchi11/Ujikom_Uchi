@@ -27,12 +27,11 @@
 
             @if ($lists->count() !== 0)
                 <!-- Jika ada list, tampilkan tombol untuk menambah list baru -->
-                <button type="button" class="btn btn-outline-primary flex-shrink-0"
-                    style="width: 18rem; height: fit-content;" data-bs-toggle="modal" data-bs-target="#addListModal">
-                    <span class="d-flex align-items-center justify-content-center">
-                        <i class="bi bi-node-plus fs-4"></i>
-                        Add List
-                    </span>
+                <button type="button"
+                    class="btn btn-outline-primary flex-shrink-0 rounded-lg p-2 shadow-sm d-flex align-items-center justify-content-center gap-2 transition"
+                    style="width: 12rem; height: auto;" data-bs-toggle="modal" data-bs-target="#addListModal">
+                    <i class="bi bi-plus-circle fs-5"></i>
+                    <span>Add List</span>
                 </button>
             @endif
 
@@ -100,7 +99,7 @@
         </div>
     @endif
 
-    <div class="d-flex gap-3 px-3 flex-nowrap overflow-x-scroll overflow-y-hidden" style="height: 100vh;">
+    <div class="d-grid gap-3 px-3" style="grid-template-columns: repeat(auto-fill, minmax(18rem, 1fr));">
         <!-- Menampilkan list tugas dalam bentuk horizontal dengan scroll, sehingga jika ada banyak list bisa discroll -->
 
         @foreach ($lists as $list)
@@ -110,23 +109,28 @@
                 <!-- Menampilkan kartu untuk setiap list tugas dengan ukuran tetap -->
 
 
-                <!-- action="{{ route('lists.destroy', $list->id) }}":  URL tujuan untuk form ini adalah rute 'lists.destroy' yang menerima parameter $list->id.Ini mengarah ke metode 'destroy' di controller yang akan menghapus daftar berdasarkan ID yang diberikan.
-                    method="POST":  Menggunakan metode POST karena HTML hanya mendukung GET dan POST dalam form.   Laravel akan memalsukan metode HTTP lain (seperti DELETE) dengan menambahkan parameter '_method' secara otomatis.   style="display: inline;":  Menetapkan tampilan form agar tampil dalam satu baris dengan elemen lainnya (inline). -->
+                <!-- action="{{ route('lists.destroy', $list->id) }}":  URL tujuan untuk form ini adalah rute 'lists.destroy' yang menerima parameter $list->id.Ini mengarah ke metode 'destroy' di controller yang akan menghapus daftar berdasarkan ID yang diberikan -->
+                    
                 <div class="card-header d-flex align-items-center justify-content-between bg-primary text-white">
-                    <!-- Header kartu dengan informasi nama list dan tombol untuk menghapus list -->
+                    <!-- Menampilkan Nama List -->
                     <h4 class="card-title m-0">{{ $list->name }}</h4>
-                    <!-- Menampilkan nama list -->
 
-                    <form action="{{ route('lists.destroy', $list->id) }}" method="POST" style="display: inline;">
-                        <!-- Form untuk menghapus list -->
-                        @csrf
-                        @method('DELETE')
-                        <button type="submit"
-                            class="btn btn-sm d-flex align-items-center justify-content-center p-2 rounded-circle border-0 bg-light text-danger shadow-sm">
-                            <i class="bi bi-trash3 fs-5"></i>
-                        </button>
-                        <!- - Tombol hapus dengan ikon tempat sampah -->
-                    </form>
+                    <div class="d-flex gap-2">
+                        <!-- Tombol Edit -->
+                        {{-- <button type="button" class="btn btn-sm btn-light text-primary" data-bs-toggle="modal"
+                            data-bs-target="#editListModal" onclick="editList({{ $list->id }}, '{{ $list->name }}')">
+                            <i class="bi bi-pencil-square fs-5"></i>
+                        </button> --}}
+
+                        <!-- Tombol Hapus -->
+                        <form action="{{ route('lists.destroy', $list->id) }}" method="POST" style="display: inline;">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="btn btn-sm btn-light text-danger">
+                                <i class="bi bi-trash3 fs-6"></i>
+                            </button>
+                        </form>
+                    </div>
                 </div>
 
                 <div class="card-body d-flex flex-column gap-2 overflow-x-hidden">
@@ -230,17 +234,6 @@
                 </div>
             </div>
         @endforeach
-
-        {{-- @if ($lists->count() !== 0)
-            <!-- Jika ada list, tampilkan tombol untuk menambah list baru -->
-            <button type="button" class="btn btn-outline-primary flex-shrink-0"
-                style="width: 18rem; height: fit-content;" data-bs-toggle="modal" data-bs-target="#addListModal">
-                <span class="d-flex align-items-center justify-content-center">
-                    <i class="bi bi-plus-lg fs-5"></i>
-                    Tambah
-                </span>
-            </button>
-        @endif --}}
     </div>
     </div>
 @endsection
